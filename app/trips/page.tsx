@@ -3,9 +3,9 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { trips as predefinedTrips, Trip, getTripPubs, totalRouteDistance } from "@/lib/trips";
+import { trips as predefinedTrips, Trip, totalRouteDistance } from "@/lib/trips";
 import { pubs, Pub } from "@/lib/pubs";
-import { Visit, TripStore, CustomTrip, TripOverride } from "@/lib/types";
+import { Visit, TripStore, CustomTrip } from "@/lib/types";
 import TripCard from "@/components/TripCard";
 import CreateTripModal from "@/components/CreateTripModal";
 
