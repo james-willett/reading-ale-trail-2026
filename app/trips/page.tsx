@@ -93,8 +93,7 @@ export default function TripsPage() {
   }, [tripStore]);
 
   // Split by type
-  const busTrips = allTrips.filter((t) => t.isBusTrip);
-  const regularTrips = allTrips.filter((t) => !t.isBusTrip && !t.isCustom);
+  const regularTrips = allTrips.filter((t) => !t.isCustom);
   const customTrips = allTrips.filter((t) => t.isCustom);
 
   // Sort each section: trips with dates first (sorted by date), then undated
@@ -326,20 +325,6 @@ export default function TripsPage() {
           </section>
         )}
 
-        {/* ── Bus trips section ──────────────────────────── */}
-        <section className="mt-6">
-          <h2 className="mb-2 text-[1.2rem] font-bold text-amber-light">
-            🚌 CAMRA Bus Trips
-          </h2>
-          <p className="mb-4 text-[0.85rem] text-secondary">
-            Book a seat on the CAMRA coach — no driving needed! Guided tours
-            taking you round the countryside pubs.
-          </p>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4">
-            {renderTripCards(busTrips)}
-          </div>
-        </section>
-
         {/* ── Self-guided trips ──────────────────────────── */}
         <section className="mt-8">
           <h2 className="mb-2 text-[1.2rem] font-bold text-amber-light">
@@ -361,7 +346,6 @@ export default function TripsPage() {
             <div className="mb-4 flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-[1.3rem] font-bold text-primary">
-                  {selectedTrip.isBusTrip && "🚌 "}
                   {selectedTrip.isCustom && "📝 "}
                   {selectedTrip.name}
                 </h2>
@@ -395,23 +379,6 @@ export default function TripsPage() {
                 </span>
               )}
             </div>
-
-            {/* Bus schedule in detail view */}
-            {selectedTrip.busInfo && (
-              <div className="bus-info-box mb-4">
-                <div className="flex items-center gap-2 text-[0.88rem]">
-                  <span>📅</span>
-                  <span className="font-bold text-primary">
-                    {selectedTrip.busInfo.displayDate}
-                  </span>
-                </div>
-                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1.5 text-[0.82rem] text-secondary">
-                  <span>📍 Pickup: {selectedTrip.busInfo.pickupStation}</span>
-                  <span>🕐 Departs: {selectedTrip.busInfo.pickupTime}</span>
-                  <span>🏠 Returns: {selectedTrip.busInfo.dropoffTime}</span>
-                </div>
-              </div>
-            )}
 
             {/* Large route map */}
             <div className="overflow-hidden rounded-xl border border-amber/20">

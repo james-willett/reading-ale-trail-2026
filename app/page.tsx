@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import PubCard from "@/components/PubCard";
@@ -24,6 +24,10 @@ export default function Home() {
 
   // Track which pub just got stamped (for bounce animation)
   const [stampedPubId, setStampedPubId] = useState<number | null>(null);
+
+  // How It Works collapsible
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const howItWorksRef = useRef<HTMLDivElement>(null);
 
   // Fetch visits on mount
   useEffect(() => {
@@ -104,6 +108,65 @@ export default function Home() {
   return (
     <>
       <Header />
+
+      {/* How It Works — collapsible info box */}
+      <section className="mx-auto max-w-[1200px] px-4 pt-4">
+        <div className="how-it-works">
+          <button
+            className="how-it-works-toggle"
+            onClick={() => setHowItWorksOpen((prev) => !prev)}
+            aria-expanded={howItWorksOpen}
+          >
+            <span className="flex items-center gap-2">
+              <span className="how-it-works-icon">?</span>
+              <span className="text-[0.95rem] font-bold text-amber-light">
+                How It Works
+              </span>
+            </span>
+            <span
+              className={`how-it-works-chevron ${howItWorksOpen ? "open" : ""}`}
+            >
+              ▾
+            </span>
+          </button>
+
+          <div
+            ref={howItWorksRef}
+            className="how-it-works-body"
+            style={{
+              maxHeight: howItWorksOpen
+                ? howItWorksRef.current?.scrollHeight
+                  ? `${howItWorksRef.current.scrollHeight}px`
+                  : "500px"
+                : "0px",
+            }}
+          >
+            <ul className="how-it-works-list">
+              <li>
+                <strong>Log a visit</strong> — tap a pub card below and hit the
+                🍺 button to check in your group.
+              </li>
+              <li>
+                <strong>Record the details</strong> — add who was there and what
+                everyone drank. Great for settling &ldquo;what was that
+                beer?&rdquo; debates later.
+              </li>
+              <li>
+                <strong>Plan your routes</strong> — head to the Trip Planner for
+                suggested routes or create your own custom trips.
+              </li>
+              <li>
+                <strong>Track your progress</strong> — the progress bar shows
+                how your group is doing across all 24 pubs.
+              </li>
+              <li>
+                <strong>Deadline: 17 May 2026</strong> — that&apos;s your
+                cut-off to complete the trail. Plenty of time!
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* Progress bar — one shared bar for the group */}
       <section className="mx-auto max-w-[1200px] px-4 pt-4">

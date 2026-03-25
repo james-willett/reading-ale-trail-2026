@@ -25,6 +25,8 @@ export default function PubCard({
 }: PubCardProps) {
   const isVisited = !!visit;
   const [expanded, setExpanded] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(false);
+  const [fadingOut, setFadingOut] = useState(false);
 
   function handleCheckIn(e: React.MouseEvent) {
     e.stopPropagation();
@@ -36,9 +38,26 @@ export default function PubCard({
     }
   }
 
-  function handleUndo(e: React.MouseEvent) {
+  function handleRemoveClick(e: React.MouseEvent) {
     e.stopPropagation();
-    onUndo();
+    setConfirmRemove(true);
+  }
+
+  function handleConfirmRemove(e: React.MouseEvent) {
+    e.stopPropagation();
+    // Trigger fade-out animation, then actually remove
+    setFadingOut(true);
+    setTimeout(() => {
+      onUndo();
+      setFadingOut(false);
+      setConfirmRemove(false);
+      setExpanded(false);
+    }, 400);
+  }
+
+  function handleCancelRemove(e: React.MouseEvent) {
+    e.stopPropagation();
+    setConfirmRemove(false);
   }
 
   // Format date nicely
@@ -53,7 +72,7 @@ export default function PubCard({
 
   return (
     <div
-      className={`pub-card-v2 ${isActive ? "active" : ""} ${isVisited ? "visited" : ""}`}
+      className={`pub-card-v2 ${isActive ? "active" : ""} ${isVisited ? "visited" : ""} ${fadingOut ? "visit-fade-out" : ""}`}
       onClick={onClick}
     >
       {/* Main row */}
@@ -139,10 +158,24 @@ export default function PubCard({
             ))}
           </div>
 
-          {/* Undo button */}
-          <button onClick={handleUndo} className="undo-visit-btn">
-            Remove visit
-          </button>
+          {/* Remove visit — with inline confirmation */}
+          {!confirmRemove ? (
+            <button onClick={handleRemoveClick} className="undo-visit-btn">
+              Remove visit
+            </button>
+          ) : (
+            <div className="remove-confirm">
+              <span className="text-[0.78rem] text-red-400">
+                Are you sure?
+              </span>
+              <button onClick={handleConfirmRemove} className="remove-confirm-yes">
+                Yes, remove
+              </button>
+              <button onClick={handleCancelRemove} className="remove-confirm-no">
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -42,22 +42,11 @@ export function getTripPubs(trip: Trip): Pub[] {
   return trip.pubIds.map((id) => pubs.find((p) => p.id === id)!);
 }
 
-// Bus trip schedule info
-export interface BusInfo {
-  date: string; // ISO date "2026-04-18"
-  displayDate: string;
-  pickupStation: string;
-  pickupTime: string;
-  dropoffTime: string;
-}
-
 export interface Trip {
   id: string;
   name: string;
   description: string;
   pubIds: number[]; // ordered by suggested visit sequence
-  isBusTrip?: boolean;
-  busInfo?: BusInfo;
   isCustom?: boolean; // true for user-created trips
   plannedDate?: string; // ISO date (from custom trip or override)
 }
@@ -134,36 +123,5 @@ export const trips: Trip[] = [
     description:
       "Three pubs scattered south of Reading. You'll need a car (or a very keen cycling group) to reach these gems.",
     pubIds: [11, 8, 19],
-  },
-  // ── CAMRA Bus Trips ──────────────────────────────────────
-  {
-    id: "bus-west",
-    name: "CAMRA Bus Trip — West",
-    description:
-      "Hop on the CAMRA coach from Pangbourne station for a guided tour of the western pubs. No designated driver needed!",
-    pubIds: [20, 24, 16, 17],
-    isBusTrip: true,
-    busInfo: {
-      date: "2026-04-18",
-      displayDate: "Saturday 18 April 2026",
-      pickupStation: "Pangbourne station",
-      pickupTime: "11:15am",
-      dropoffTime: "~17:45",
-    },
-  },
-  {
-    id: "bus-east",
-    name: "CAMRA Bus Trip — East",
-    description:
-      "The CAMRA coach picks you up at Twyford station and takes you round the eastern village pubs. Sit back and enjoy!",
-    pubIds: [18, 23, 22, 21],
-    isBusTrip: true,
-    busInfo: {
-      date: "2026-04-26",
-      displayDate: "Sunday 26 April 2026",
-      pickupStation: "Twyford station",
-      pickupTime: "10:30am",
-      dropoffTime: "~18:40",
-    },
   },
 ];

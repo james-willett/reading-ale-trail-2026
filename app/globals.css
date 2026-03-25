@@ -332,16 +332,6 @@
   background: linear-gradient(135deg, rgba(34, 197, 94, 0.06) 0%, #16213e 40%);
 }
 
-/* Bus trip special styling — amber dashed border */
-.trip-card.bus-trip {
-  border: 1.5px dashed rgba(212, 160, 52, 0.4);
-  background: linear-gradient(135deg, rgba(212, 160, 52, 0.05) 0%, #16213e 50%);
-}
-
-.trip-card.bus-trip:hover {
-  border-color: rgba(212, 160, 52, 0.6);
-}
-
 /* ---------- Trip status badges ---------- */
 .trip-status-badge {
   @apply shrink-0 rounded-full px-2.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider;
@@ -357,11 +347,6 @@
 
 .trip-badge-complete {
   @apply border border-green-500/30 bg-green-500/[0.12] text-green-400;
-}
-
-/* ---------- Bus info box ---------- */
-.bus-info-box {
-  @apply rounded-lg border border-amber/20 bg-amber/[0.06] px-3.5 py-2.5;
 }
 
 /* ---------- Trip stat chips ---------- */
@@ -476,6 +461,84 @@
 
 .create-trip-pub-list::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 160, 52, 0.5);
+}
+
+/* ============================================================
+   Phase 6 — How It Works, Remove Visit confirmation, fade-out
+   ============================================================ */
+
+/* ---------- How It Works collapsible ---------- */
+.how-it-works {
+  @apply rounded-xl border border-amber/20 bg-card/80 overflow-hidden;
+}
+
+.how-it-works-toggle {
+  @apply flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-card-hover;
+}
+
+.how-it-works-icon {
+  @apply flex h-6 w-6 items-center justify-center rounded-full border border-amber/30 bg-amber/[0.12] text-[0.75rem] font-bold text-amber;
+}
+
+.how-it-works-chevron {
+  @apply text-[0.85rem] text-muted transition-transform duration-300;
+}
+
+.how-it-works-chevron.open {
+  transform: rotate(180deg);
+}
+
+.how-it-works-body {
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.how-it-works-list {
+  @apply space-y-2 px-4 pb-4 pt-1 text-[0.85rem] leading-relaxed text-secondary;
+  list-style: none;
+}
+
+.how-it-works-list li {
+  @apply flex gap-2;
+}
+
+.how-it-works-list li::before {
+  content: "•";
+  @apply shrink-0 text-amber;
+}
+
+.how-it-works-list li strong {
+  @apply text-primary;
+}
+
+/* ---------- Remove visit confirmation ---------- */
+.remove-confirm {
+  @apply mt-3 flex items-center gap-2.5;
+  animation: fade-in 0.15s ease;
+}
+
+.remove-confirm-yes {
+  @apply rounded-lg border border-red-500/30 bg-red-500/[0.12] px-3 py-1 text-[0.75rem] font-semibold text-red-400 transition-colors hover:bg-red-500/[0.2];
+}
+
+.remove-confirm-no {
+  @apply rounded-lg border border-amber/20 bg-card px-3 py-1 text-[0.75rem] font-semibold text-muted transition-colors hover:bg-card-hover hover:text-primary;
+}
+
+/* ---------- Visit fade-out animation ---------- */
+@keyframes visit-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.visit-fade-out {
+  animation: visit-fade-out 0.4s ease forwards;
 }
 
 /* ---------- Responsive ---------- */

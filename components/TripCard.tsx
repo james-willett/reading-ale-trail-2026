@@ -57,14 +57,13 @@ export default function TripCard({
 
   return (
     <div
-      className={`trip-card ${trip.isBusTrip ? "bus-trip" : ""} ${isComplete ? "complete" : ""} ${isSelected ? "selected" : ""}`}
+      className={`trip-card ${isComplete ? "complete" : ""} ${isSelected ? "selected" : ""}`}
       onClick={onClick}
     >
       {/* Header row */}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <h3 className="text-[1.05rem] font-bold text-primary leading-snug">
-            {trip.isBusTrip && "🚌 "}
             {isCustom && "📝 "}
             {trip.name}
           </h3>
@@ -99,23 +98,6 @@ export default function TripCard({
       <p className="mt-1.5 text-[0.82rem] text-secondary leading-relaxed">
         {trip.description}
       </p>
-
-      {/* Bus trip schedule info */}
-      {trip.busInfo && (
-        <div className="bus-info-box mt-3">
-          <div className="flex items-center gap-2 text-[0.82rem]">
-            <span>📅</span>
-            <span className="font-semibold text-primary">
-              {trip.busInfo.displayDate}
-            </span>
-          </div>
-          <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[0.78rem] text-secondary">
-            <span>📍 {trip.busInfo.pickupStation}</span>
-            <span>🕐 Pickup: {trip.busInfo.pickupTime}</span>
-            <span>🏠 Return: {trip.busInfo.dropoffTime}</span>
-          </div>
-        </div>
-      )}
 
       {/* Stats row */}
       <div className="mt-3 flex flex-wrap items-center gap-3 text-[0.78rem]">
