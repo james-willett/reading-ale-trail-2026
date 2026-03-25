@@ -7,11 +7,15 @@ import PubCard from "@/components/PubCard";
 import ProgressBar from "@/components/ProgressBar";
 import VisitModal from "@/components/VisitModal";
 import BackToTop from "@/components/BackToTop";
+import MapSkeleton from "@/components/MapSkeleton";
 import { pubs, Pub } from "@/lib/pubs";
 import { Visit, Attendee } from "@/lib/types";
 
-// Leaflet must be client-side only — no SSR
-const AleTrailMap = dynamic(() => import("@/components/Map"), { ssr: false });
+// Leaflet must be client-side only — dynamic import with loading skeleton
+const AleTrailMap = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+  loading: () => <MapSkeleton />,
+});
 
 export default function Home() {
   const [selectedPub, setSelectedPub] = useState<Pub | null>(null);

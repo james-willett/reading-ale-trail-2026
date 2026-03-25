@@ -9,9 +9,13 @@ import { Visit, TripStore, CustomTrip } from "@/lib/types";
 import TripCard from "@/components/TripCard";
 import CreateTripModal from "@/components/CreateTripModal";
 import BackToTop from "@/components/BackToTop";
+import MapSkeleton from "@/components/MapSkeleton";
 
-// Leaflet needs client-side only — no SSR
-const TripMap = dynamic(() => import("@/components/TripMap"), { ssr: false });
+// Leaflet needs client-side only — dynamic import with loading skeleton
+const TripMap = dynamic(() => import("@/components/TripMap"), {
+  ssr: false,
+  loading: () => <MapSkeleton height="h-[400px]" />,
+});
 
 // Format an ISO date string for display, e.g. "Sat 12 Apr"
 function formatPlannedDate(iso: string): string {

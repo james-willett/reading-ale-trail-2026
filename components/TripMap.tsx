@@ -83,6 +83,8 @@ export default function TripMap({
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         maxZoom={19}
+        updateWhenZooming={false}
+        updateWhenIdle={true}
       />
 
       {/* Dashed amber route line between pubs */}

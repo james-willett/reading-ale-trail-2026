@@ -84,6 +84,8 @@ export default function AleTrailMap({ pubs, selectedPub, visitedPubIds }: MapPro
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         maxZoom={19}
+        updateWhenZooming={false}
+        updateWhenIdle={true}
       />
 
       {pubs.map((pub) => (
