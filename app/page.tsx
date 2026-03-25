@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import PubCard from "@/components/PubCard";
 import ProgressBar from "@/components/ProgressBar";
 import VisitModal from "@/components/VisitModal";
+import BackToTop from "@/components/BackToTop";
 import { pubs, Pub } from "@/lib/pubs";
 import { Visit, Attendee } from "@/lib/types";
 
@@ -28,6 +29,7 @@ export default function Home() {
   // How It Works collapsible
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const howItWorksRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   // Fetch visits on mount
   useEffect(() => {
@@ -103,6 +105,8 @@ export default function Home() {
 
   function handlePubClick(pub: Pub) {
     setSelectedPub(pub);
+    // Scroll to map so the user sees the fly-to on mobile
+    mapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   return (
@@ -174,7 +178,7 @@ export default function Home() {
       </section>
 
       {/* Map */}
-      <div className="mt-4">
+      <div className="mt-4" ref={mapRef}>
         <AleTrailMap
           pubs={pubs}
           selectedPub={selectedPub}
@@ -244,6 +248,8 @@ export default function Home() {
           onClose={() => setModalPub(null)}
         />
       )}
+
+      <BackToTop />
     </>
   );
 }

@@ -541,6 +541,73 @@
   animation: visit-fade-out 0.4s ease forwards;
 }
 
+/* ============================================================
+   Phase 7 — Mobile UX: Scroll, Back-to-top, Active highlights
+   ============================================================ */
+
+/* ---------- Pulsing active highlight for pub cards ---------- */
+@keyframes active-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(212, 160, 52, 0.4), 0 0 12px rgba(212, 160, 52, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(212, 160, 52, 0.6), 0 0 20px rgba(212, 160, 52, 0.3);
+  }
+}
+
+.pub-card-v2.active {
+  animation: active-pulse 2s ease-in-out infinite;
+  border-color: #d4a034;
+}
+
+/* ---------- Pulsing active highlight for trip cards ---------- */
+.trip-card.selected {
+  animation: active-pulse 2s ease-in-out infinite;
+  border-color: #d4a034;
+}
+
+/* ---------- Back-to-top floating button ---------- */
+.back-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(212, 160, 52, 0.9);
+  color: #0f0f23;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border: 2px solid rgba(212, 160, 52, 0.6);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(212, 160, 52, 0.3);
+  transition: all 0.2s ease;
+  animation: fade-in 0.2s ease;
+}
+
+.back-to-top:hover {
+  background: #d4a034;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(212, 160, 52, 0.4);
+}
+
+.back-to-top:active {
+  transform: translateY(0);
+}
+
+@media (min-width: 769px) {
+  .back-to-top {
+    /* Still show on desktop but slightly smaller */
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.1rem;
+  }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .header h1 {

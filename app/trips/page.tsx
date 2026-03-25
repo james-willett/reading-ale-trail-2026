@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { trips as predefinedTrips, Trip, totalRouteDistance } from "@/lib/trips";
@@ -8,6 +8,7 @@ import { pubs, Pub } from "@/lib/pubs";
 import { Visit, TripStore, CustomTrip } from "@/lib/types";
 import TripCard from "@/components/TripCard";
 import CreateTripModal from "@/components/CreateTripModal";
+import BackToTop from "@/components/BackToTop";
 
 // Leaflet needs client-side only — no SSR
 const TripMap = dynamic(() => import("@/components/TripMap"), { ssr: false });
@@ -48,6 +49,7 @@ export default function TripsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const detailRef = useRef<HTMLDivElement>(null);
 
   // Fetch visits + trip store on mount
   useEffect(() => {
@@ -112,7 +114,15 @@ export default function TripsPage() {
     : null;
 
   function handleTripClick(trip: Trip) {
+    const isDeselecting = selectedTripId === trip.id;
     setSelectedTripId((prev) => (prev === trip.id ? null : trip.id));
+    // Scroll to the detail panel when selecting (not deselecting)
+    if (!isDeselecting) {
+      // Small delay to let the panel render before scrolling
+      setTimeout(() => {
+        detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
   }
 
   // ── Get the effective pub list for a trip (respecting overrides) ──
@@ -341,7 +351,7 @@ export default function TripsPage() {
 
         {/* ── Trip detail panel (when a card is selected) ── */}
         {selectedTrip && (
-          <section className="trip-detail-panel mt-6">
+          <section ref={detailRef} className="trip-detail-panel mt-6">
             {/* Detail header */}
             <div className="mb-4 flex items-start justify-between gap-3">
               <div>
@@ -507,6 +517,8 @@ export default function TripsPage() {
           contributors
         </p>
       </footer>
+
+      <BackToTop />
     </>
   );
 }
