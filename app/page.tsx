@@ -4,11 +4,10 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import PubCard from "@/components/PubCard";
-import PersonSelector from "@/components/PersonSelector";
 import ProgressBar from "@/components/ProgressBar";
-import Leaderboard from "@/components/Leaderboard";
+import VisitModal from "@/components/VisitModal";
 import { pubs, Pub } from "@/lib/pubs";
-import { Member, Visit } from "@/lib/types";
+import { Visit, Attendee } from "@/lib/types";
 
 // Leaflet must be client-side only — no SSR
 const AleTrailMap = dynamic(() => import("@/components/Map"), { ssr: false });
@@ -16,26 +15,25 @@ const AleTrailMap = dynamic(() => import("@/components/Map"), { ssr: false });
 export default function Home() {
   const [selectedPub, setSelectedPub] = useState<Pub | null>(null);
 
-  // Members + visits state
-  const [members, setMembers] = useState<Member[]>([]);
+  // Group visits state
   const [visits, setVisits] = useState<Visit[]>([]);
-  const [selectedPersonId, setSelectedPersonId] = useState<string>("james");
   const [loading, setLoading] = useState(true);
 
-  // Fetch members and visits on mount
+  // Modal state — which pub are we checking into?
+  const [modalPub, setModalPub] = useState<Pub | null>(null);
+
+  // Track which pub just got stamped (for bounce animation)
+  const [stampedPubId, setStampedPubId] = useState<number | null>(null);
+
+  // Fetch visits on mount
   useEffect(() => {
     async function loadData() {
       try {
-        const [membersRes, visitsRes] = await Promise.all([
-          fetch("/api/members"),
-          fetch("/api/visits"),
-        ]);
-        const membersData = await membersRes.json();
-        const visitsData = await visitsRes.json();
-        setMembers(membersData.members);
-        setVisits(visitsData.visits);
+        const res = await fetch("/api/visits");
+        const data = await res.json();
+        setVisits(data.visits);
       } catch (err) {
-        console.error("Failed to load data:", err);
+        console.error("Failed to load visits:", err);
       } finally {
         setLoading(false);
       }
@@ -43,101 +41,61 @@ export default function Home() {
     loadData();
   }, []);
 
-  // Current person's visited pub IDs (as a Set for fast lookup)
+  // Set of visited pub IDs (for fast lookup — map markers, etc.)
   const visitedPubIds = useMemo(() => {
-    const ids = visits
-      .filter((v) => v.personId === selectedPersonId)
-      .map((v) => v.pubId);
-    return new Set(ids);
-  }, [visits, selectedPersonId]);
+    return new Set(visits.map((v) => v.pubId));
+  }, [visits]);
 
-  // Current person's visit count
+  // Quick lookup: pubId → Visit
+  const visitMap = useMemo(() => {
+    const map = new Map<number, Visit>();
+    visits.forEach((v) => map.set(v.pubId, v));
+    return map;
+  }, [visits]);
+
   const visitedCount = visitedPubIds.size;
 
-  // Selected member info
-  const selectedMember = members.find((m) => m.id === selectedPersonId);
-
-  // Toggle a pub visit
-  const toggleVisit = useCallback(
-    async (pubId: number) => {
-      const isCurrentlyVisited = visits.some(
-        (v) => v.personId === selectedPersonId && v.pubId === pubId
-      );
-
+  // Submit a visit from the modal
+  const submitVisit = useCallback(
+    async (pubId: number, date: string, attendees: Attendee[]) => {
       // Optimistic update
-      if (isCurrentlyVisited) {
-        setVisits((prev) =>
-          prev.filter(
-            (v) => !(v.personId === selectedPersonId && v.pubId === pubId)
-          )
-        );
-      } else {
-        setVisits((prev) => [
-          ...prev,
-          {
-            personId: selectedPersonId,
-            pubId,
-            date: new Date().toISOString(),
-          },
-        ]);
-      }
+      const newVisit: Visit = { pubId, date, attendees };
+      setVisits((prev) => [...prev.filter((v) => v.pubId !== pubId), newVisit]);
+      setModalPub(null);
 
-      // Persist to API
+      // Trigger the stamp bounce animation
+      setStampedPubId(pubId);
+      setTimeout(() => setStampedPubId(null), 800);
+
+      // Persist
       try {
         const res = await fetch("/api/visits", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            personId: selectedPersonId,
-            pubId,
-            visited: !isCurrentlyVisited,
-          }),
+          body: JSON.stringify({ pubId, date, attendees }),
         });
         const data = await res.json();
         setVisits(data.visits);
       } catch (err) {
-        console.error("Failed to toggle visit:", err);
+        console.error("Failed to save visit:", err);
       }
     },
-    [selectedPersonId, visits]
+    []
   );
 
-  // Add a guest member
-  const addGuest = useCallback(async (name: string) => {
+  // Undo / remove a visit
+  const removeVisit = useCallback(async (pubId: number) => {
+    // Optimistic update
+    setVisits((prev) => prev.filter((v) => v.pubId !== pubId));
+
     try {
-      const res = await fetch("/api/members", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      if (!res.ok) return;
+      const res = await fetch(`/api/visits/${pubId}`, { method: "DELETE" });
       const data = await res.json();
-      setMembers(data.members);
+      setVisits(data.visits);
     } catch (err) {
-      console.error("Failed to add guest:", err);
+      console.error("Failed to remove visit:", err);
     }
   }, []);
-
-  // Remove a guest member
-  const removeGuest = useCallback(
-    async (id: string) => {
-      try {
-        const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
-        if (!res.ok) return;
-        const data = await res.json();
-        setMembers(data.members);
-        // Clean up visits locally too
-        setVisits((prev) => prev.filter((v) => v.personId !== id));
-        // If we just removed the selected person, switch to James
-        if (selectedPersonId === id) {
-          setSelectedPersonId("james");
-        }
-      } catch (err) {
-        console.error("Failed to remove guest:", err);
-      }
-    },
-    [selectedPersonId]
-  );
 
   function handlePubClick(pub: Pub) {
     setSelectedPub(pub);
@@ -147,27 +105,9 @@ export default function Home() {
     <>
       <Header />
 
-      {/* Person Selector + Progress — sticky on mobile for quick access */}
-      <section className="mx-auto max-w-[1200px] px-4 pt-4 space-y-3">
-        {!loading && (
-          <>
-            <PersonSelector
-              members={members}
-              selectedId={selectedPersonId}
-              onSelect={setSelectedPersonId}
-              onAddGuest={addGuest}
-              onRemoveGuest={removeGuest}
-            />
-
-            {selectedMember && (
-              <ProgressBar
-                visitedCount={visitedCount}
-                memberName={selectedMember.name}
-                memberEmoji={selectedMember.emoji}
-              />
-            )}
-          </>
-        )}
+      {/* Progress bar — one shared bar for the group */}
+      <section className="mx-auto max-w-[1200px] px-4 pt-4">
+        {!loading && <ProgressBar visitedCount={visitedCount} />}
       </section>
 
       {/* Map */}
@@ -186,7 +126,7 @@ export default function Home() {
             All 24 Pubs
           </h2>
           <p className="text-[0.85rem] text-muted">
-            Tap the beer to stamp your visit!
+            Tap a pub to check in your group!
           </p>
         </div>
 
@@ -196,20 +136,15 @@ export default function Home() {
               key={pub.id}
               pub={pub}
               isActive={selectedPub?.id === pub.id}
-              isVisited={visitedPubIds.has(pub.id)}
+              visit={visitMap.get(pub.id)}
+              animateStamp={stampedPubId === pub.id}
               onClick={() => handlePubClick(pub)}
-              onToggleVisit={() => toggleVisit(pub.id)}
+              onCheckIn={() => setModalPub(pub)}
+              onUndo={() => removeVisit(pub.id)}
             />
           ))}
         </div>
       </section>
-
-      {/* Leaderboard */}
-      {!loading && members.length > 0 && (
-        <section className="mx-auto max-w-[1200px] px-4 pb-8">
-          <Leaderboard members={members} visits={visits} />
-        </section>
-      )}
 
       {/* Footer */}
       <footer className="border-t border-amber/20 px-4 py-6 text-center text-[0.78rem] text-muted">
@@ -237,6 +172,15 @@ export default function Home() {
           contributors
         </p>
       </footer>
+
+      {/* Visit check-in modal */}
+      {modalPub && (
+        <VisitModal
+          pub={modalPub}
+          onSubmit={submitVisit}
+          onClose={() => setModalPub(null)}
+        />
+      )}
     </>
   );
 }

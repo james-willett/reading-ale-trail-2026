@@ -4,17 +4,18 @@ import { pubs } from "@/lib/pubs";
 
 interface ProgressBarProps {
   visitedCount: number;
-  memberName: string;
-  memberEmoji: string;
 }
 
-// Progress tier messages
+// Fun tier messages based on progress
 function getTierMessage(count: number): string {
   if (count === 0) return "Time to hit the trail! 🚶";
-  if (count <= 8) return "Just getting started! 🍺";
-  if (count <= 16) return "Halfway hero! 🏆";
-  if (count <= 23) return "Nearly there! 🔥";
-  return "🎉 ALE TRAIL LEGEND! 🎉";
+  if (count <= 4) return "Just getting warmed up! 🍺";
+  if (count <= 8) return "Nice start, keep going! 🍻";
+  if (count <= 12) return "Halfway heroes! 🏆";
+  if (count <= 16) return "On a proper crawl now! 💪";
+  if (count <= 20) return "The finish line is in sight! 🔥";
+  if (count <= 23) return "SO close! One more push! 🚀";
+  return "🎉 ALE TRAIL LEGENDS! 🎉";
 }
 
 // Progress bar colour: red (0-8), amber (9-16), green (17-24)
@@ -30,11 +31,7 @@ function getGlowColor(count: number): string {
   return "shadow-green-500/30";
 }
 
-export default function ProgressBar({
-  visitedCount,
-  memberName,
-  memberEmoji,
-}: ProgressBarProps) {
+export default function ProgressBar({ visitedCount }: ProgressBarProps) {
   const total = pubs.length;
   const percentage = Math.round((visitedCount / total) * 100);
   const barColor = getBarColor(visitedCount);
@@ -46,18 +43,18 @@ export default function ProgressBar({
       {/* Header row */}
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-lg">{memberEmoji}</span>
+          <span className="text-lg">🍺</span>
           <span className="text-[0.9rem] font-bold text-primary">
-            {memberName}&apos;s Progress
+            Group Progress
           </span>
         </div>
         <span className="text-[0.85rem] font-bold text-amber-light">
-          {visitedCount}/{total} pubs
+          {visitedCount}/{total} pubs visited
         </span>
       </div>
 
       {/* The bar */}
-      <div className="relative h-4 overflow-hidden rounded-full bg-card border border-amber/10">
+      <div className="relative h-4 overflow-hidden rounded-full border border-amber/10 bg-card">
         <div
           className={`h-full rounded-full transition-all duration-700 ease-out ${barColor} shadow-lg ${glowColor}`}
           style={{ width: `${percentage}%` }}
