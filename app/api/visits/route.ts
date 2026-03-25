@@ -1,22 +1,9 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import { VisitData } from "@/lib/types";
-
-const VISITS_PATH = path.join(process.cwd(), "data", "visits.json");
-
-function readVisits(): VisitData {
-  const raw = fs.readFileSync(VISITS_PATH, "utf-8");
-  return JSON.parse(raw);
-}
-
-function writeVisits(data: VisitData): void {
-  fs.writeFileSync(VISITS_PATH, JSON.stringify(data, null, 2));
-}
+import { getVisits, saveVisits } from "@/lib/data";
 
 // GET /api/visits — return all group visits
 export async function GET() {
-  const data = readVisits();
+  const data = await getVisits();
   return NextResponse.json(data);
 }
 
@@ -33,12 +20,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const data = readVisits();
+  const data = await getVisits();
 
   // Replace any existing visit for this pub (re-visiting updates it)
   data.visits = data.visits.filter((v) => v.pubId !== pubId);
   data.visits.push({ pubId, date, attendees });
 
-  writeVisits(data);
+  await saveVisits(data);
   return NextResponse.json(data);
 }

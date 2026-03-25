@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import { VisitData } from "@/lib/types";
-
-const VISITS_PATH = path.join(process.cwd(), "data", "visits.json");
+import { getVisits, saveVisits } from "@/lib/data";
 
 // DELETE /api/visits/[pubId] — remove a visit (undo a check-in)
 export async function DELETE(
@@ -16,8 +12,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid pubId" }, { status: 400 });
   }
 
-  const raw = fs.readFileSync(VISITS_PATH, "utf-8");
-  const data: VisitData = JSON.parse(raw);
+  const data = await getVisits();
 
   const before = data.visits.length;
   data.visits = data.visits.filter((v) => v.pubId !== pubId);
@@ -26,6 +21,6 @@ export async function DELETE(
     return NextResponse.json({ error: "Visit not found" }, { status: 404 });
   }
 
-  fs.writeFileSync(VISITS_PATH, JSON.stringify(data, null, 2));
+  await saveVisits(data);
   return NextResponse.json(data);
 }
