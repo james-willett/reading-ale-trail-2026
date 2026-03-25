@@ -1,0 +1,414 @@
+/* ============================================================
+   Reading Ale Trail 2026 — Custom Styles
+   Dark/amber craft beer theme
+   ============================================================ */
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --bg-dark: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-card-hover: #1e2d4f;
+  --amber: #d4a034;
+  --amber-light: #e8b94a;
+  --amber-glow: rgba(212, 160, 52, 0.3);
+  --gold: #f0c040;
+  --cream: #f5f0e1;
+  --text-primary: #f5f0e1;
+  --text-secondary: #a0a8b8;
+  --text-muted: #6b7280;
+  --accent-green: #4ade80;
+  --border-subtle: rgba(212, 160, 52, 0.2);
+}
+
+/* ---------- Base ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  border-bottom: 2px solid var(--amber);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grain/texture overlay */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, var(--amber-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.site-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--amber-light), var(--gold), var(--amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.site-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.meta-badge.pubs {
+  background: rgba(212, 160, 52, 0.15);
+  color: var(--amber-light);
+  border: 1px solid var(--border-subtle);
+}
+
+.meta-badge.deadline {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.meta-badge.camra {
+  background: rgba(74, 222, 128, 0.1);
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.meta-badge.countdown {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+/* ---------- Map ---------- */
+#map {
+  width: 100%;
+  height: 55vh;
+  min-height: 350px;
+  z-index: 1;
+}
+
+/* Beer marker pins */
+.beer-marker-container {
+  background: none !important;
+  border: none !important;
+}
+
+.beer-marker {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1;
+}
+
+.beer-marker:hover {
+  transform: scale(1.3);
+}
+
+.beer-marker.booklet-seller {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px var(--amber)) drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Map popup styling */
+.pub-popup {
+  font-family: 'Inter', system-ui, sans-serif;
+  min-width: 180px;
+}
+
+.pub-popup h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.pub-popup .popup-area {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b45309;
+  margin-bottom: 0.25rem;
+}
+
+.pub-popup .popup-address {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin-bottom: 0.4rem;
+}
+
+.pub-popup .popup-badge {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  margin-top: 0.25rem;
+}
+
+/* ---------- Pub List Section ---------- */
+.pub-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--amber-light);
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Pub Cards Grid ---------- */
+#pub-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.85rem;
+}
+
+.pub-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pub-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--amber);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--amber-glow);
+}
+
+.pub-card.active {
+  background: var(--bg-card-hover);
+  border-color: var(--amber);
+  box-shadow: 0 0 0 2px var(--amber-glow), 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pub-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.pub-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--amber);
+  background: rgba(212, 160, 52, 0.12);
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
+.pub-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pub-area {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--amber);
+  margin-bottom: 0.2rem;
+}
+
+.pub-address {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.booklet-badge {
+  display: inline-block;
+  margin-top: 0.4rem;
+  background: rgba(212, 160, 52, 0.15);
+  color: var(--amber-light);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-subtle);
+}
+
+.pub-card-action {
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.pub-card:hover .pub-card-action {
+  opacity: 1;
+}
+
+.map-link {
+  cursor: pointer;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.site-footer a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Leaflet Overrides ---------- */
+.leaflet-control-zoom a {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--bg-card-hover) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(26, 26, 46, 0.85) !important;
+  color: var(--text-muted) !important;
+  font-size: 0.65rem !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--amber) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .site-title {
+    font-size: 1.5rem;
+  }
+
+  .header-icon {
+    font-size: 2rem;
+  }
+
+  #map {
+    height: 45vh;
+    min-height: 280px;
+  }
+
+  #pub-list {
+    grid-template-columns: 1fr;
+  }
+
+  .header-meta {
+    gap: 0.5rem;
+  }
+
+  .meta-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.55rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 1rem 0.75rem;
+  }
+
+  .site-title {
+    font-size: 1.25rem;
+  }
+
+  .pub-section {
+    padding: 1rem 0.75rem 2rem;
+  }
+}
