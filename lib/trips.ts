@@ -58,6 +58,8 @@ export interface Trip {
   pubIds: number[]; // ordered by suggested visit sequence
   isBusTrip?: boolean;
   busInfo?: BusInfo;
+  isCustom?: boolean; // true for user-created trips
+  plannedDate?: string; // ISO date (from custom trip or override)
 }
 
 // ──────────────────────────────────────────────────────────
