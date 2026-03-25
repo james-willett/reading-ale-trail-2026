@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Header() {
   const [daysRemaining, setDaysRemaining] = useState<string>("--");
@@ -32,6 +33,16 @@ export default function Header() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(212,160,52,0.3)_0%,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto max-w-[1200px]">
+        {/* Navigation */}
+        <nav className="mb-3 flex items-center justify-end gap-4 text-[0.85rem]">
+          <Link
+            href="/trips"
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber/20 bg-amber/[0.1] px-3 py-1 font-semibold text-amber-light transition-colors hover:bg-amber/[0.2]"
+          >
+            🗺️ Trip Planner
+          </Link>
+        </nav>
+
         {/* Title row */}
         <div className="mb-2 flex items-center justify-center gap-3">
           <span className="text-[2.5rem] leading-none">🍺</span>
