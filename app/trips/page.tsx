@@ -329,7 +329,7 @@ export default function TripsPage() {
             <p className="mb-4 text-[0.85rem] text-secondary">
               Trips you&apos;ve created — pick your own pubs and order.
             </p>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))]">
               {renderTripCards(sortedCustom)}
             </div>
           </section>
@@ -344,7 +344,7 @@ export default function TripsPage() {
             Plan your own adventure — we&apos;ve grouped the 24 pubs into
             sensible trips based on location.
           </p>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fill,minmax(340px,1fr))]">
             {renderTripCards(sortedRegular)}
           </div>
         </section>

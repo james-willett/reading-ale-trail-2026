@@ -608,7 +608,11 @@
   }
 }
 
-/* ---------- Responsive ---------- */
+/* ============================================================
+   Phase 8 — Mobile Layout Polish
+   ============================================================ */
+
+/* ---------- Mobile: < 768px ---------- */
 @media (max-width: 768px) {
   .header h1 {
     font-size: 1.5rem !important;
@@ -617,20 +621,102 @@
   .header .text-\[2\.5rem\] {
     font-size: 2rem;
   }
+
+  /* Compact progress section on mobile */
+  .progress-section {
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Stamp button must meet 44px minimum tap target */
+  .stamp-button {
+    width: 2.75rem;   /* 44px */
+    height: 2.75rem;
+    font-size: 1.3rem;
+  }
+
+  /* Attendee chips bigger for thumb tapping */
+  .attendee-chip {
+    min-height: 2.75rem;    /* 44px */
+    padding: 0.5rem 0.875rem;
+    font-size: 0.88rem;
+  }
+
+  /* Modal inputs taller for easier tapping */
+  .modal-input {
+    height: 2.75rem;    /* 44px */
+    font-size: 0.9rem;
+  }
+
+  /* Trip detail panel — reduce horizontal padding */
+  .trip-detail-panel {
+    padding: 1rem 0.875rem;
+  }
+
+  /* Trip pub row — bigger touch target */
+  .trip-pub-row {
+    padding: 0.75rem;
+    min-height: 3.25rem;
+  }
+
+  /* Reorder buttons — bigger for thumb */
+  .reorder-arrow-btn {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  /* Pub card padding adjusted for mobile */
+  .pub-card-v2 {
+    padding: 0.875rem;
+  }
+
+  /* Remove visit / confirm buttons — already have min-h-[44px] via Tailwind */
+  .undo-visit-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.82rem;
+  }
+
+  .remove-confirm-yes,
+  .remove-confirm-no {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.82rem;
+  }
+
+  /* Badge sizes on mobile */
+  .badge-pubs,
+  .badge-deadline,
+  .badge-countdown,
+  .badge-camra {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.78rem;
+  }
+
+  /* Trip card padding on mobile */
+  .trip-card {
+    padding: 0.875rem 1rem;
+  }
+
+  /* How it works — compact on mobile */
+  .how-it-works-list {
+    font-size: 0.82rem;
+    padding: 0.25rem 0.75rem 0.75rem;
+  }
 }
 
+/* ---------- Very small screens: < 480px ---------- */
 @media (max-width: 480px) {
   .header {
-    padding: 1rem 0.75rem;
+    padding: 0.75rem;
   }
 
   .header h1 {
     font-size: 1.25rem !important;
   }
 
+  /* Keep stamp button at 44px even on tiny screens */
   .stamp-button {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.75rem;
+    height: 2.75rem;
     font-size: 1.2rem;
   }
 }

@@ -197,7 +197,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3.5">
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
           {pubs.map((pub) => (
             <PubCard
               key={pub.id}

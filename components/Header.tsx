@@ -28,13 +28,13 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="header relative overflow-hidden border-b-2 border-amber px-4 py-6 text-center">
+    <header className="header relative overflow-hidden border-b-2 border-amber px-4 py-4 text-center md:py-6">
       {/* Ambient glow overlay */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(212,160,52,0.3)_0%,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto max-w-[1200px]">
         {/* Navigation */}
-        <nav className="mb-3 flex items-center justify-end gap-4 text-[0.85rem]">
+        <nav className="mb-2 flex items-center justify-end gap-4 text-[0.85rem] md:mb-3">
           <Link
             href="/trips"
             className="inline-flex items-center gap-1.5 rounded-full border border-amber/20 bg-amber/[0.1] px-3 py-1 font-semibold text-amber-light transition-colors hover:bg-amber/[0.2]"
@@ -52,17 +52,17 @@ export default function Header() {
           <span className="text-[2.5rem] leading-none">🍺</span>
         </div>
 
-        <p className="mb-3 text-base text-secondary">
+        <p className="mb-2 text-sm text-secondary md:mb-3 md:text-base">
           Reading &amp; Mid-Berkshire CAMRA &mdash; Explore 24 great real ale
           pubs
         </p>
 
         {/* Meta badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 text-[0.85rem] sm:gap-6">
-          <span className="badge-pubs">🍻 24 Pubs to Visit</span>
-          <span className="badge-deadline">📅 Deadline: 17 May 2026</span>
+        <div className="flex flex-wrap items-center justify-center gap-2 text-[0.8rem] sm:gap-4 sm:text-[0.85rem]">
+          <span className="badge-pubs">🍻 24 Pubs</span>
+          <span className="badge-deadline">📅 17 May 2026</span>
           <span className="badge-countdown">⏳ {daysRemaining}</span>
-          <span className="badge-camra">🏷️ CAMRA</span>
+          <span className="badge-camra hidden sm:inline-flex">🏷️ CAMRA</span>
         </div>
       </div>
     </header>

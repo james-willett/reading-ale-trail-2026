@@ -160,7 +160,7 @@ export default function PubCard({
 
           {/* Remove visit — with inline confirmation */}
           {!confirmRemove ? (
-            <button onClick={handleRemoveClick} className="undo-visit-btn">
+            <button onClick={handleRemoveClick} className="undo-visit-btn min-h-[44px]">
               Remove visit
             </button>
           ) : (
@@ -168,10 +168,10 @@ export default function PubCard({
               <span className="text-[0.78rem] text-red-400">
                 Are you sure?
               </span>
-              <button onClick={handleConfirmRemove} className="remove-confirm-yes">
+              <button onClick={handleConfirmRemove} className="remove-confirm-yes min-h-[44px]">
                 Yes, remove
               </button>
-              <button onClick={handleCancelRemove} className="remove-confirm-no">
+              <button onClick={handleCancelRemove} className="remove-confirm-no min-h-[44px]">
                 Cancel
               </button>
             </div>

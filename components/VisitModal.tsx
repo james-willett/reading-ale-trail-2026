@@ -108,7 +108,7 @@ export default function VisitModal({ pub, onSubmit, onClose }: VisitModalProps) 
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-card-hover hover:text-primary"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-lg text-muted transition-colors hover:bg-card-hover hover:text-primary"
           >
             ✕
           </button>
@@ -176,7 +176,7 @@ export default function VisitModal({ pub, onSubmit, onClose }: VisitModalProps) 
             <button
               onClick={addGuest}
               disabled={guestInput.trim().length === 0}
-              className="rounded-lg bg-amber/20 px-3 text-[0.82rem] font-semibold text-amber transition-colors hover:bg-amber/30 disabled:opacity-40 disabled:hover:bg-amber/20"
+              className="min-h-[44px] rounded-lg bg-amber/20 px-4 text-[0.85rem] font-semibold text-amber transition-colors hover:bg-amber/30 disabled:opacity-40 disabled:hover:bg-amber/20"
             >
               Add
             </button>

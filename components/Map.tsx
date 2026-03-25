@@ -78,7 +78,7 @@ export default function AleTrailMap({ pubs, selectedPub, visitedPubIds }: MapPro
       center={[51.4543, -0.9781]}
       zoom={12}
       scrollWheelZoom={true}
-      className="h-[55vh] min-h-[350px] w-full z-[1]"
+      className="h-[60vh] min-h-[350px] w-full z-[1] md:h-[55vh]"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
