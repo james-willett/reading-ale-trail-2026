@@ -6,7 +6,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Pub } from "@/lib/pubs";
 
-// Custom beer marker icon
+// Custom beer marker icon — unvisited
 const beerIcon = L.divIcon({
   html: '<div class="beer-marker">🍺</div>',
   className: "beer-marker-container",
@@ -18,6 +18,15 @@ const beerIcon = L.divIcon({
 // Booklet seller gets a special glowing icon
 const bookletIcon = L.divIcon({
   html: '<div class="beer-marker booklet-seller">🍺</div>',
+  className: "beer-marker-container",
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+  popupAnchor: [0, -30],
+});
+
+// Visited pub marker — gold checkmark
+const visitedIcon = L.divIcon({
+  html: '<div class="beer-marker visited-marker">✅</div>',
   className: "beer-marker-container",
   iconSize: [36, 36],
   iconAnchor: [18, 36],
@@ -51,10 +60,18 @@ function FlyToMarker({
 interface MapProps {
   pubs: Pub[];
   selectedPub: Pub | null;
+  visitedPubIds: Set<number>;
 }
 
-export default function AleTrailMap({ pubs, selectedPub }: MapProps) {
+export default function AleTrailMap({ pubs, selectedPub, visitedPubIds }: MapProps) {
   const markerRefs = useRef<Record<number, L.Marker>>({});
+
+  // Choose the right icon for each pub
+  function getIcon(pub: Pub): L.DivIcon {
+    if (visitedPubIds.has(pub.id)) return visitedIcon;
+    if (pub.isBookletSeller) return bookletIcon;
+    return beerIcon;
+  }
 
   return (
     <MapContainer
@@ -73,7 +90,7 @@ export default function AleTrailMap({ pubs, selectedPub }: MapProps) {
         <Marker
           key={pub.id}
           position={[pub.lat, pub.lng]}
-          icon={pub.isBookletSeller ? bookletIcon : beerIcon}
+          icon={getIcon(pub)}
           ref={(ref) => {
             if (ref) markerRefs.current[pub.id] = ref;
           }}
@@ -85,6 +102,9 @@ export default function AleTrailMap({ pubs, selectedPub }: MapProps) {
               <p className="popup-address">{pub.address}</p>
               {pub.isBookletSeller && (
                 <span className="popup-badge">📖 Sells Booklets</span>
+              )}
+              {visitedPubIds.has(pub.id) && (
+                <span className="popup-badge visited">✅ Visited</span>
               )}
             </div>
           </Popup>

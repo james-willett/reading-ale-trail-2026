@@ -1,17 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import { Pub } from "@/lib/pubs";
 
 interface PubCardProps {
   pub: Pub;
   isActive: boolean;
+  isVisited: boolean;
   onClick: () => void;
+  onToggleVisit: () => void;
 }
 
-export default function PubCard({ pub, isActive, onClick }: PubCardProps) {
+export default function PubCard({
+  pub,
+  isActive,
+  isVisited,
+  onClick,
+  onToggleVisit,
+}: PubCardProps) {
+  // Track whether we just stamped (for triggering animation)
+  const [justStamped, setJustStamped] = useState(false);
+
+  function handleStamp(e: React.MouseEvent) {
+    e.stopPropagation(); // Don't trigger card click
+    if (!isVisited) {
+      setJustStamped(true);
+      // Reset animation flag after it plays
+      setTimeout(() => setJustStamped(false), 800);
+    }
+    onToggleVisit();
+  }
+
   return (
     <div
-      className={`pub-card ${isActive ? "active" : ""}`}
+      className={`pub-card ${isActive ? "active" : ""} ${isVisited ? "visited" : ""}`}
       onClick={onClick}
     >
       <div className="min-w-0 flex-1">
@@ -37,9 +59,18 @@ export default function PubCard({ pub, isActive, onClick }: PubCardProps) {
         )}
       </div>
 
-      {/* Map pin action */}
-      <div className="flex-shrink-0 text-[1.3rem] opacity-40 transition-opacity group-hover:opacity-100">
-        <span title="Show on map">📍</span>
+      {/* Visit stamp button */}
+      <div className="flex flex-shrink-0 flex-col items-center gap-1">
+        <button
+          onClick={handleStamp}
+          className={`stamp-button ${isVisited ? "stamped" : ""} ${justStamped ? "stamp-animate" : ""}`}
+          title={isVisited ? "Unmark visit" : "Mark as visited!"}
+        >
+          {isVisited ? "✅" : "🍺"}
+        </button>
+        <span className="text-[0.65rem] font-semibold text-muted">
+          {isVisited ? "Visited!" : "Tap me!"}
+        </span>
       </div>
     </div>
   );

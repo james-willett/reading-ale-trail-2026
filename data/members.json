@@ -1,0 +1,11 @@
+{
+  "members": [
+    { "id": "james", "name": "James", "emoji": "🎸", "isCore": true },
+    { "id": "stan", "name": "Stan", "emoji": "🎩", "isCore": true },
+    { "id": "bernard", "name": "Bernard", "emoji": "🧔", "isCore": true },
+    { "id": "colonel", "name": "Colonel", "emoji": "🎖️", "isCore": true },
+    { "id": "sarah", "name": "Sarah", "emoji": "🌟", "isCore": false },
+    { "id": "noga", "name": "Noga", "emoji": "🌸", "isCore": false },
+    { "id": "aidan", "name": "Aidan", "emoji": "⚡", "isCore": false }
+  ]
+}
