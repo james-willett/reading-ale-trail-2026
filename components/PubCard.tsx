@@ -91,9 +91,21 @@ export default function PubCard({
           <p className="mb-0.5 text-[0.82rem] font-semibold text-amber">
             {pub.area}
           </p>
-          <p className="text-[0.78rem] leading-snug text-muted">
-            {pub.address}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-[0.78rem] leading-snug text-muted">
+              {pub.address}
+            </p>
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${pub.lat},${pub.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-shrink-0 rounded-md bg-amber/[0.12] px-1.5 py-0.5 text-[0.7rem] font-semibold text-amber hover:bg-amber/[0.25] transition-colors"
+              title="Open in Google Maps"
+            >
+              📍
+            </a>
+          </div>
 
           {pub.isBookletSeller && (
             <span className="mt-1.5 inline-block rounded-full border border-amber/20 bg-amber/[0.15] px-2 py-0.5 text-[0.72rem] font-semibold text-amber-light">

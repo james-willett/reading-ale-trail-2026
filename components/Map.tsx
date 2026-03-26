@@ -108,6 +108,28 @@ export default function AleTrailMap({ pubs, selectedPub, visitedPubIds }: MapPro
               {visitedPubIds.has(pub.id) && (
                 <span className="popup-badge visited">✅ Visited</span>
               )}
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${pub.lat},${pub.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="popup-directions"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  marginTop: '6px',
+                  padding: '4px 10px',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: '#f59e0b',
+                  background: 'rgba(245, 158, 11, 0.1)',
+                  border: '1px solid rgba(245, 158, 11, 0.25)',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                }}
+              >
+                📍 Directions
+              </a>
             </div>
           </Popup>
         </Marker>
