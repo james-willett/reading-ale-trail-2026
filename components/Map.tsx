@@ -33,6 +33,38 @@ const visitedIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
+// Invalidate map size when tab becomes visible again (fixes blank map after returning from Google Maps)
+function MapVisibilityHandler() {
+  const map = useMap();
+
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === "visible") {
+        // Small delay to let the browser repaint first
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 100);
+      }
+    }
+
+    function handleFocus() {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [map]);
+
+  return null;
+}
+
 // Component to fly to a pub when selectedPubId changes
 function FlyToMarker({
   pub,
@@ -136,6 +168,7 @@ export default function AleTrailMap({ pubs, selectedPub, visitedPubIds }: MapPro
       ))}
 
       <FlyToMarker pub={selectedPub} markerRefs={markerRefs} />
+      <MapVisibilityHandler />
     </MapContainer>
   );
 }
